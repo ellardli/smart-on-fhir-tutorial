@@ -71,23 +71,28 @@
     <script src='./src/js/example-smart-app.js'></script>
 
     <!-- FHIR Client JS Library -->
-    <!-- <script src='./lib/js/fhir-client-v0.1.12.js'></script> -->
+    <!-- <script src='./lib/js/fhir-client-v2.5.4.js'></script> -->
     <script src='./lib/js/fhir-client-v2.5.4.js'></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
-      extractData().then(
-        //Display Patient Demographics and Observations if extractData was success
-        function(p) {
-          drawVisualization(p);
-        },
+      // extractData().then(
+      //   //Display Patient Demographics and Observations if extractData was success
+      //   function(p) {
+      //     drawVisualization(p);
+      //   },
 
-        //Display 'Failed to call FHIR Service' if extractData failed
-        function() {
-          $('#loading').hide();
-          $('#errors').html('<p> Failed to call FHIR Service </p>');
-        }
-      );
+      //   //Display 'Failed to call FHIR Service' if extractData failed
+      //   function() {
+      //     $('#loading').hide();
+      //     $('#errors').html('<p> Failed to call FHIR Service </p>');
+      //   }
+      // );
+
+      FHIR.oauth2.ready()
+          .then(client => client.request("Patient"))
+          .then(console.log)
+          .catch(console.error);
     </script>
   </body>
 </html>
