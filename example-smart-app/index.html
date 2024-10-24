@@ -89,8 +89,46 @@
       //   }
       // );
 
+      function onError() {
+          console.log('Loading error', arguments);
+          ret.reject();
+        }
+
+      function onReady(client) {
+        if (client.hasOwnProperty('patient')) {
+          var patient = client.patient;
+          console.log('patient:');
+          console.log(patient)
+
+          var pt = patient.read();
+
+          var obv = client.patient.api.fetchAll({
+            type: 'Observation',
+            query: {
+              code: {
+                $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
+                  'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
+                  'http://loinc.org|2089-1', 'http://loinc.org|55284-4']
+              }
+            }
+          });
+
+          $.when(pt, obv).fail(onError);
+
+          $.when(pt, obv).done(function(patient, obv) {
+            console.log("patient done:");
+            console.log(patient);
+            console.log("obv done:");
+            console.log(obv);
+          });
+        }
+        else {
+          onError();
+        }
+      }
+
       FHIR.oauth2.ready()
-          .then(client => client.request("Patient"))
+          .then(onReady)
           .then(console.log)
           .catch(console.error);
     </script>
