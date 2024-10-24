@@ -3,11 +3,13 @@
     var ret = $.Deferred();
 
     function onError() {
+      console.log("onError");
       console.log('Loading error', arguments);
       ret.reject();
     }
 
     function onReady(client)  {
+      console.log("onReady");
       if (client.hasOwnProperty('patient')) {
         var patient = client.patient;
         var pt = patient.read();
@@ -108,7 +110,8 @@
       }
     }
 
-    FHIR.oauth2.ready(onReady, onError);
+    console.log("Setting up oauth2 ready and error callbacks");
+    FHIR.oauth2.ready.then(onReady).catch(onError);
     return ret.promise();
 
   };
