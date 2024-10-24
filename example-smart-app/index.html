@@ -113,16 +113,18 @@
           //   }
           // });
 
-          var codes = ['http://loinc.org|8302-2', 'http://loinc.org|8462-4'];
+          var codes = ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
+                  'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
+                  'http://loinc.org|2089-1', 'http://loinc.org|55284-4'];
+
+          var query = new URLSearchParams();
+          query.set("code", codes.join(","));
 
           // 'http://loinc.org|55284-4' - Error: Cannot filter "loinc.org|55284-4" resources by patient
 
-          var obv = client.patient.request("Observation?code=http://loinc.org|8302-2", {
+          var obv = client.patient.request("Observation?"+query, {
             pageLimit: 0,
-            onPage(bundle) {
-              comsole.log("Observation onPage");
-              console.log(bundle);
-            }
+            flat: true,
           });
 
           $.when(pt, obv).fail(onError);
