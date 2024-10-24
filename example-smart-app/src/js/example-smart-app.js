@@ -111,7 +111,7 @@
     }
 
     console.log("Setting up oauth2 ready and error callbacks");
-    FHIR.oauth2.ready.then(onReady).catch(onError);
+    FHIR.oauth2.ready().then(onReady).catch(onError);
     return ret.promise();
 
   };
