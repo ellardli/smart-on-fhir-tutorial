@@ -117,7 +117,7 @@
 
           // 'http://loinc.org|55284-4' - Error: Cannot filter "loinc.org|55284-4" resources by patient
 
-          var obv = client.patient.request("Observation/http://loinc.org|8302-2", {
+          var obv = client.patient.request("Observation?code=http://loinc.org|8302-2", {
             pageLimit: 0,
             onPage(bundle) {
               comsole.log("Observation onPage");
