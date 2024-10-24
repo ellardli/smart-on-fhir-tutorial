@@ -115,7 +115,9 @@
 
           var codes = ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
                   'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
-                  'http://loinc.org|2089-1', 'http://loinc.org|55284-4'];
+                  'http://loinc.org|2089-1'];
+
+          // 'http://loinc.org|55284-4' - Error: Cannot filter "loinc.org|55284-4" resources by patient
 
           var obv = client.patient.request("Observation/code="+codes.join(','), {
             pageLimit: 0,
