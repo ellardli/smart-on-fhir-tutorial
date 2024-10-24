@@ -50,8 +50,6 @@
         console.log('patient:');
         console.log(patient)
 
-        $.when(pt, obv).fail(onError);
-
         Promise.all([pt, obv]).then((values) => {
           let patient = values[0];
           let obv = values[1];
@@ -110,7 +108,7 @@
           console.log(p);
           ret.resolve(p);
         }).catch((error) => {
-          console.log(error);
+          onError();
         });
       } else {
         onError();
