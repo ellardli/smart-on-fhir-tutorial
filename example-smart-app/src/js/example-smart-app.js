@@ -7,21 +7,33 @@
       ret.reject();
     }
 
-    function onReady(smart)  {
-      if (smart.hasOwnProperty('patient')) {
-        var patient = smart.patient;
+    function onReady(client)  {
+      if (client.hasOwnProperty('patient')) {
+        var patient = client.patient;
         var pt = patient.read();
 
-         var obv = smart.patient.api.fetchAll({
-           type: 'Observation',
-           query: {
-             code: {
-               $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
-                     'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
-                     'http://loinc.org|2089-1', 'http://loinc.org|55284-4']
-             }
-           }
-         });
+        var codes = ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
+          'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
+          'http://loinc.org|2089-1', 'http://loinc.org|55284-4'];
+
+        var query = new URLSearchParams();
+        query.set("code", codes.join(","));
+        var obv = client.patient.request("Observation?"+query, {
+          pageLimit: 0,
+          flat: true,
+        });
+
+        // Ye olde way, no fhir.js means we can't do this
+        //  var obv = client.patient.api.fetchAll({
+        //    type: 'Observation',
+        //    query: {
+        //      code: {
+        //        $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
+        //              'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
+        //              'http://loinc.org|2089-1', 'http://loinc.org|55284-4']
+        //      }
+        //    }
+        //  });
 
         // Previous UW values for lymph
         //var obv = smart.patient.api.fetchAll({
@@ -39,7 +51,7 @@
         $.when(pt, obv).fail(onError);
 
         $.when(pt, obv).done(function(patient, obv) {
-          var byCodes = smart.byCodes(obv, 'code');
+          var byCodes = client.byCodes(obv, 'code');
           console.log("byCodes:");
           console.log(byCodes('8480-6'));
           console.log(byCodes('8462-4'));
